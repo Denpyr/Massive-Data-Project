@@ -1,0 +1,154 @@
+\documentclass{article}
+\usepackage{imakeidx} % Per creare un vero indice
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{verbatim}
+\usepackage{listings} %Python
+\usepackage{amsfonts}
+\usepackage{tcolorbox}
+\usepackage{titlesec}
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+\usepackage{ragged2e}
+\usepackage{setspace}
+\usepackage{caption}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{float}
+\usepackage{array}
+\usepackage{graphics}
+\usepackage{multirow}
+\usepackage{listings}
+\usepackage{pythonhighlight}
+\usetikzlibrary{arrows}
+\usepackage{graphicx} % Importa il pacchetto graphicx per l'inserimento di immagini
+\usepackage{multicol} % Per avere la multicolonna
+\usepackage[a4paper, top=3cm, bottom=4cm, left=3cm, right=3cm, includehead, includefoot]{geometry}
+% Imposta il carattere Times New Roman
+\usepackage{mathptmx}
+\usepackage{titlesec} % Per \HRule
+\definecolor{main}{HTML}{5989cf}
+\definecolor{sub}{HTML}{cde4ff} 
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+\newtcolorbox{boxC}{
+	colback = sub, % background color
+	boxrule = 0pt  % no borders
+}
+
+\lstset{ 
+	language=python, 
+	basicstyle=\ttfamily\footnotesize,
+	frame=single, 
+	numbers=left, 
+	numberstyle=\tiny\color{gray}, 
+	stepnumber=1, 
+	numbersep=5pt, 
+	backgroundcolor=\color{white}, 
+	showspaces=false, 
+	showstringspaces=false, 
+	showtabs=false, 
+	frame=single, 
+	rulecolor=\color{black}, 
+	tabsize=4, 
+	captionpos=b, 
+	breaklines=true, 
+	breakatwhitespace=true, 
+	title=\lstname, 
+	keywordstyle=\color{blue}, 
+	commentstyle=\color{purple}, 
+	stringstyle=\color{violet}, 
+}
+\renewcommand{\headrulewidth}{0pt}
+\setlength{\headheight}{60pt} % Altezza dell'intestazione
+\setlength{\headsep}{50pt} % Distanza intestazione - contenuto
+
+\makeindex % Indice
+\begin{document}
+	
+	\begin{titlepage}
+		\thispagestyle{fancy} % Stile fancy solo per questa pagina
+		\fancyhf{} % Cancella intestazioni e piè di pagina di default
+		\fancyhead[L]{\includegraphics[width=4.5cm]{immagini/logodisamis.jpg}} % Immagine a sinistra
+		\fancyhead[R]{\includegraphics[width=3cm]{immagini/logounisa.png}} % Immagine a destra
+		\begin{center}
+			
+			% Topo
+			\textsc{\LARGE Universita' degli Studi di Salerno}\\[1.5cm]
+			\textsc{\large DIPARTIMENTO DI SCIENZE AZIENDALI - MANAGEMENT \& INNOVATION SYSTEMS}\\[0.2cm]
+			\textsc{\large Corso di Laurea Magistrale in Data Science \& Gestione dell'Innovazione}\\[3.5cm]
+			
+			% Titolo
+			{ \huge \bfseries Esame di Massive Data Mining}\\[0.4cm]
+			{ \huge \bfseries TMDB 5000 Movie Dataset Title Recommendation System}\\[0.4cm]
+
+			
+			\begin{center}
+				\textbf{A.A. 2024-2025} \\ [2.50cm]
+				\textbf{Docenti:} \\[0.2cm]
+				\textbf{Domenico Parente} \\[0.2cm]
+				\textbf{Luca Rizzuti} \\ [4.0cm]
+				\textbf{\bfseries Candidata:\\}
+				\textsc{Denise Brancaccio - Mat. 0222800163}\\
+
+				
+			\end{center}
+			
+		\end{center}
+	\end{titlepage}
+	\newpage
+	
+	\tableofcontents
+	
+	\newpage
+	\section{Introduzione}
+	La seguente documentazione illustra il progetto realizzato per l'esame di Massive Data Mining, incentrato sulla creazione di un motore di ricerca per il TMDB 5000 Movie Dataset, il quale raccoglie vaste informazioni su 5000 film diversi includendo:
+	\begin{itemize}
+	\item Title;
+	\item Genres;
+	\item Overview;
+	\item Cast e Crew;
+	\item Production Companies;
+	\item Keywords;
+	\item Ratings;
+	\end{itemize} \\
+	L'obiettivo è creare un sistema di raccomandazione sui film in grado di restituire, a partire da una query immessa dall'utente, i 10 film più pertinenti. La query può essere il titolo di un film, scritto in modo approssimativo o corretto, uno o più generi, una trama generale, il nome di un membro del cast o la compagnia di produzione. L'obiettivo principale del progetto è gestire in modo robusto situazioni reali, tenendo conto sia la possibilità che le query siano precise, sia che possano presentare imprecisioni come titoli parziali, errori di battitura, descrizioni molto generiche della trama.\\
+	Per realizzare questo lavoro sono state utilizzati due approcci: la cosine similarity, realizzata tramite embedding vettoriali generati dal modello "all-MiniLM-L6-v2" della libreria SentenceTrasformers, e la FuzzySearch, metodo della libreria thefuzz basato sulla distanza di Levenshtein, a sua volta basata su quelle di Hamming e Manhattan, ed utilizzato per la ricerca in caso di titoli o nomi parziali. 
+	
+\subsection{Strumenti e Tecnologie Utilizzate}
+	Al fine della realizzazione del progetto è stato utilizzato il linguaggio di programmazione Python tramite un Notebook Jupiter per ottimizzare la pulizia del codice. Sono inoltre state impiegate le seguenti librerie:
+	\begin{itemize}
+		\item \textbf{pandas}: utilizzata per la manipolazione e l'analisi dei dati tabellari tramite DataFrame.
+		
+		\item \textbf{ast}: impiegata per convertire rappresentazioni testuali di strutture dati Python (es. liste o dizionari) in oggetti utilizzabili dal programma.
+		
+		\item \textbf{numpy}: utilizzata per operazioni numeriche efficienti su array e matrici.
+		
+		\item \textbf{thefuzz}: libreria per il \textit{fuzzy matching}, impiegata per misurare la somiglianza tra stringhe anche in presenza di errori o variazioni testuali.
+		
+		\item \textbf{sentence-transformers}: utilizzata per generare embedding semantici di frasi e testi mediante modelli basati su Transformer.
+		
+		\item \textbf{scikit-learn} (\texttt{cosine\_similarity}): utilizzata per calcolare la similarità coseno tra vettori, ad esempio tra embedding testuali.
+	\end{itemize}\\
+	Inoltre per le realizzazione dell'Analisi Esplorativa dei Dati, sono state utilizzate anche le librerie:
+	\begin{itemize}
+		\item \textbf{seaborn}: libreria per la visualizzazione statistica dei dati, utilizzata per creare grafici informativi e facilmente interpretabili.
+		
+		\item \textbf{plotly.express}: modulo di Plotly che consente di generare grafici interattivi in modo semplice e rapido.
+		
+		\item \textbf{collections} (\texttt{Counter}): struttura dati utilizzata per contare automaticamente le occorrenze degli elementi presenti in una collezione.
+		
+		\item \textbf{wordcloud} (\texttt{WordCloud}): libreria utilizzata per generare nuvole di parole, in cui la dimensione di ciascun termine è proporzionale alla sua frequenza nel testo.
+		
+		\item \textbf{wordcloud} (\texttt{STOPWORDS}): insieme predefinito di parole comuni da escludere durante la generazione della nuvola di parole, poiché poco informative ai fini dell'analisi.
+	\end{itemize}\\
+\newpage
+\section{Analisi Esplorativa dei Dati}
+Prima di procedere con le fasi successive dell'analisi, è opportuno svolgere un'Analisi Esplorativa dei Dati, al fine di acquisire una comprensione approfondita del dataset oggetto di studio. Questa fase preliminare consente di esaminare la struttura dei dati, identificare eventuali valori mancanti o anomalie e ottenere una panoramica delle principali caratteristiche delle variabili presenti.\\
+Dopo aver caricato e unito i dataset "tmdb\_5000\_movies.csv" e "tmdb\_5000\_credits.csv" tramite l'id univoco dei film, sono state analizzate le sue dimensioni e la composizione delle colonne, verificando il numero di osservazioni e di attributi disponibili, i quali ammontano a 4803 righe e 24 colonne. Tra queste ultime sono presenti:
+
+\end{document}
