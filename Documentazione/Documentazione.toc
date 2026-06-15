@@ -3,3 +3,26 @@
 \contentsline {section}{\numberline {1}Introduzione}{2}{section.1}%
 \contentsline {subsection}{\numberline {1.1}Strumenti e Tecnologie Utilizzate}{2}{subsection.1.1}%
 \contentsline {section}{\numberline {2}Analisi Esplorativa dei Dati}{4}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Pulizia del Dataset}{7}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Visualizzazioni Grafiche}{8}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Correlazioni}{12}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Wordcloud}{14}{subsection.2.4}%
+\contentsline {section}{\numberline {3}Svolgimento del Progetto}{15}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Preparazione del Dataset}{15}{subsection.3.1}%
+\contentsline {subsubsection}{\numberline {3.1.1}Funzione: clean\_json}{15}{subsubsection.3.1.1}%
+\contentsline {subsubsection}{\numberline {3.1.2}Funzione: cleaning\_and\_processing}{15}{subsubsection.3.1.2}%
+\contentsline {subsubsection}{\numberline {3.1.3}Funzione: join\_list\_elements}{16}{subsubsection.3.1.3}%
+\contentsline {subsubsection}{\numberline {3.1.4}Caricamento e Pulizia}{17}{subsubsection.3.1.4}%
+\contentsline {subsection}{\numberline {3.2}Sentence Embedding}{17}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Calcolo delle Metriche}{18}{subsection.3.3}%
+\contentsline {subsubsection}{\numberline {3.3.1}Funzione: calc\_sentence\_score}{18}{subsubsection.3.3.1}%
+\contentsline {subsubsection}{\numberline {3.3.2}Funzione: find\_genres}{18}{subsubsection.3.3.2}%
+\contentsline {subsubsection}{\numberline {3.3.3}Funzione: calc\_genres\_score}{19}{subsubsection.3.3.3}%
+\contentsline {subsubsection}{\numberline {3.3.4}Funzione: calc\_title\_score}{19}{subsubsection.3.3.4}%
+\contentsline {subsubsection}{\numberline {3.3.5}Funzione: calc\_people\_score}{20}{subsubsection.3.3.5}%
+\contentsline {subsubsection}{\numberline {3.3.6}Funzione: calc\_total\_score}{21}{subsubsection.3.3.6}%
+\contentsline {subsubsection}{\numberline {3.3.7}Ricerca dei Film}{21}{subsubsection.3.3.7}%
+\contentsline {section}{\numberline {4}Validazione}{22}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Funzione: get\_top\_k\_titles}{22}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Validation Set}{22}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Funzione: run\_validation}{25}{subsection.4.3}%
