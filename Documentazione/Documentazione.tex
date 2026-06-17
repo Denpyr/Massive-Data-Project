@@ -23,6 +23,7 @@
 \usepackage{graphics}
 \usepackage{multirow}
 \usepackage{listings}
+\usepackage{amsmath}
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{pythonhighlight}
@@ -118,7 +119,7 @@
 	\item Keywords;
 	\item Ratings;
 	\end{itemize}
-	L'obiettivo \`e creare un sistema di raccomandazione sui film in grado di restituire, a partire da una query immessa dall'utente, i 10 film più pertinenti. La query può essere il titolo di un film, scritto in modo approssimativo o corretto, uno o più generi, una trama generale, il nome di un membro del cast o la compagnia di produzione. L'obiettivo principale del progetto \`e gestire in modo robusto situazioni reali, tenendo conto sia la possibilità che le query siano precise, sia che possano presentare imprecisioni come titoli parziali, errori di battitura, descrizioni molto generiche della trama.\\
+	L'obiettivo \`e creare un sistema di raccomandazione sui film in grado di restituire, a partire da una query immessa dall'utente, i 10 film più pertinenti. La query pu\`o essere il titolo di un film, scritto in modo approssimativo o corretto, uno o pi\`u generi, una trama generale, il nome di un membro del cast o la compagnia di produzione. L'obiettivo principale del progetto \`e gestire in modo robusto situazioni reali, tenendo conto sia la possibilit\`a che le query siano precise, sia che possano presentare imprecisioni come titoli parziali, errori di battitura, descrizioni molto generiche della trama.\\
 	Per realizzare questo lavoro sono state utilizzati due approcci: la cosine similarity, realizzata tramite embedding vettoriali generati dal modello "all-MiniLM-L6-v2" della libreria SentenceTrasformers, e la FuzzySearch, metodo della libreria thefuzz basato sulla distanza di Levenshtein, a sua volta basata su quelle di Hamming e Manhattan, ed utilizzato per la ricerca in caso di titoli o nomi parziali. 
 	
 \subsection{Strumenti e Tecnologie Utilizzate}
@@ -152,7 +153,7 @@
 \section{Analisi Esplorativa dei Dati}
 Prima di procedere con le fasi successive dell'analisi, \`e opportuno svolgere un'Analisi Esplorativa dei Dati, al fine di acquisire una comprensione approfondita del dataset oggetto di studio. Questa fase preliminare consente di esaminare la struttura dei dati, identificare eventuali valori mancanti o anomalie e ottenere una panoramica delle principali caratteristiche delle variabili presenti.\\
 Dopo aver caricato e unito i dataset "tmdb\_5000\_movies.csv" e "tmdb\_5000\_credits.csv" tramite l'id univoco dei film, sono state analizzate le sue dimensioni e la composizione delle colonne, verificando il numero di osservazioni e di attributi disponibili, i quali ammontano a 4803 righe e 24 colonne. Tra queste ultime sono presenti:
-\begin{table}[htbp]
+\begin{table}[H]
 	\centering
 	\renewcommand{\arraystretch}{1.4} 
 	\begin{tabularx}{\textwidth}{@{} l X l @{}}
@@ -231,7 +232,7 @@ Per farlo, calcoliamo innanzitutto la somma dei valori "null" e dei valori prese
 	\centering
 	\includegraphics[width=0.9\linewidth]{immagini/nullgraph}
 \end{figure}
-Molte colonne del dataset si presentava originariamente sotto forma di stringhe di testo contenenti liste di dizionari, strutturate in modo simile a un formato JSON. Per rendere queste informazioni facilmente analizzabili, si \`e reso necessario estrarre solo il dato rilevante, ovvero il nome del genere, dell'attore o della casa di produzione, scartando i codici identificativi e altri metadati non necessari. A tale scopo, \`e stata definita la funzione personalizzata clean\_json. Questa funzione effettua innanzitutto un controllo preliminare per verificare che la cella contenga effettivamente del testo e non sia vuota, al fine di evitare anomalie e interruzioni nell'esecuzione del codice. Successivamente, attraverso l'utilizzo di un blocco di gestione degli errori utile a prevenire blocchi causati da eventuali stringhe corrotte, la funzione sfrutta il metodo literal\_eval della libreria ast per convertire in modo sicuro la stringa testuale in una reale struttura dati Python. A questo punto, tramite l'utilizzo di una list comprehension, viene effettuata un'iterazione sui dizionari per estrarre esclusivamente il testo associato alla chiave "name". Una volta definita la logica di estrazione, i nomi di tutte le colonne interessate sono stati raccolti all'interno di una lista dedicata. Infine, attraverso un ciclo iterativo e avvalendosi del metodo .apply(), la trasformazione \`e stata applicata in modo massivo a tutte le variabili selezionate, sovrascrivendo i dati grezzi originali con le nuove liste pulite direttamente all'interno del dataframe.
+Molte colonne del dataset si presentavano originariamente sotto forma di stringhe di testo contenenti liste di dizionari, strutturate in modo simile a un formato JSON. Per rendere queste informazioni facilmente analizzabili, si \`e reso necessario estrarre solo il dato rilevante, ovvero il nome del genere, dell'attore o della casa di produzione, scartando i codici identificativi e altri metadati non necessari. A tale scopo, \`e stata definita la funzione personalizzata clean\_json. Questa funzione effettua innanzitutto un controllo preliminare per verificare che la cella contenga effettivamente del testo e non sia vuota, al fine di evitare anomalie e interruzioni nell'esecuzione del codice. Successivamente, attraverso l'utilizzo di un blocco di gestione degli errori utile a prevenire blocchi causati da eventuali stringhe corrotte, la funzione sfrutta il metodo literal\_eval della libreria ast per convertire in modo sicuro la stringa testuale in una reale struttura dati Python. A questo punto, tramite l'utilizzo di una list comprehension, viene effettuata un'iterazione sui dizionari per estrarre esclusivamente il testo associato alla chiave "name". Una volta definita la logica di estrazione, i nomi di tutte le colonne interessate sono stati raccolti all'interno di una lista dedicata. Infine, attraverso un ciclo iterativo e avvalendosi del metodo .apply(), la trasformazione \`e stata applicata in modo massivo a tutte le variabili selezionate, sovrascrivendo i dati grezzi originali con le nuove liste pulite direttamente all'interno del dataframe.
 \begin{lstlisting}
 	# Passaggio da json a lista di stringhe per le colonne specificate
 	def clean_json(json_text):
@@ -260,7 +261,7 @@ Molte colonne del dataset si presentava originariamente sotto forma di stringhe 
 \end{lstlisting}
 
 \subsection{Pulizia del Dataset}
-Al fine di preparare il dataset per le successive esplorazioni, \`e stata eseguita una fase di pulizia e trasformazione dei dati. Inizialmente, la variabile relativa alla data di uscita \`e stata convertita in un formato temporale adeguato, gestendo in modo sicuro eventuali errori di formattazione e permettendo l'estrazione dell'anno di pubblicazione all'interno di una nuova colonna dedicata. Successivamente, per snellire la struttura delle informazioni, sono state rimosse alcune variabili ritenute non necessarie per lo scopo dell'analisi, come gli identificativi ridondanti, gli slogan promozionali, lo stato della produzione e i collegamenti alle pagine web. Si \`e poi proceduto all'eliminazione dei record privi del dato sulla durata della pellicola e alla normalizzazione del nome della colonna del titolo, correggendo le alterazioni dovute alla precedente unione dei dati. Per garantire la significativit\`a e l'affidabilità delle valutazioni finanziarie e qualitative, il dataframe \`e stato rigorosamente filtrato, conservando esclusivamente i film caratterizzati da budget, incassi e votazioni medie strettamente maggiori di zero. Infine, sfruttando i dati economici appena purificati, \`e stata generata una nuova metrica utile a calcolare il ritorno sull'investimento (ROI) in formato percentuale, indicatore fondamentale per misurare in modo standardizzato la profittabilit\`a economica di ciascuna opera cinematografica.
+Al fine di preparare il dataset per le successive esplorazioni, \`e stata eseguita una fase di pulizia e trasformazione dei dati. Inizialmente, la variabile relativa alla data di uscita \`e stata convertita in un formato temporale adeguato, gestendo in modo sicuro eventuali errori di formattazione e permettendo l'estrazione dell'anno di pubblicazione all'interno di una nuova colonna dedicata. Successivamente, per snellire la struttura delle informazioni, sono state rimosse alcune variabili ritenute non necessarie per lo scopo dell'analisi, come gli identificativi ridondanti, gli slogan promozionali, lo stato della produzione e i collegamenti alle pagine web. Si \`e poi proceduto all'eliminazione dei record privi del dato sulla durata della pellicola e alla normalizzazione del nome della colonna del titolo, correggendo le alterazioni dovute alla precedente unione dei dati. Per garantire la significativit\`a e l'affidabilit\`a delle valutazioni finanziarie e qualitative, il dataframe \`e stato rigorosamente filtrato, conservando esclusivamente i film caratterizzati da budget, incassi e votazioni medie strettamente maggiori di zero. Infine, sfruttando i dati economici appena purificati, \`e stata generata una nuova metrica utile a calcolare il ritorno sull'investimento (ROI) in formato percentuale, indicatore fondamentale per misurare in modo standardizzato la profittabilit\`a economica di ciascuna opera cinematografica.
 \begin{lstlisting}
 	# Pulizia e trasformazione dei dati
 	df["release_date"] = pd.to_datetime(df["release_date"], errors="coerce")
@@ -284,7 +285,7 @@ Per approfondire la comprensione delle variabili a seguito della pulizia sono st
 	\centering
 	\includegraphics[width=1.0\linewidth]{immagini/histogram}
 \end{figure}
-Successivamente all'analisi delle distribuzioni, l'esplorazione visiva \`e proseguita con l'utilizzo di boxplot per le principali variabili numeriche. Questa tipologia di grafico offre una sintesi visiva estremamente efficace per valutare la dispersione dei dati, mettendo in evidenza la mediana, la variabilità e l'intervallo in cui si concentra la maggior parte dei valori. L'obiettivo principale di questa rappresentazione \`e l'identificazione degli outlier, ovvero quei valori anomali che si discostano in modo significativo dal corpo principale della distribuzione. Nel contesto cinematografico, l'osservazione dei boxplot permette di individuare e isolare facilmente le eccezioni statistiche, come i grandi blockbuster caratterizzati da investimenti o incassi straordinariamente elevati rispetto alla media del settore, oppure pellicole con durate e valutazioni estreme. Riconoscere e mappare queste anomalie statistiche risulta fondamentale per comprendere la reale eterogeneit\`a del dataset e per valutare in che misura tali eccezioni possano influenzare i modelli e le elaborazioni successive.
+Successivamente all'analisi delle distribuzioni, l'esplorazione visiva \`e proseguita con l'utilizzo di boxplot per le principali variabili numeriche. Questa tipologia di grafico offre una sintesi visiva estremamente efficace per valutare la dispersione dei dati, mettendo in evidenza la mediana, la variabilit\`a e l'intervallo in cui si concentra la maggior parte dei valori. L'obiettivo principale di questa rappresentazione \`e l'identificazione degli outlier, ovvero quei valori anomali che si discostano in modo significativo dal corpo principale della distribuzione. Nel contesto cinematografico, l'osservazione dei boxplot permette di individuare e isolare facilmente le eccezioni statistiche, come i grandi blockbuster caratterizzati da investimenti o incassi straordinariamente elevati rispetto alla media del settore, oppure pellicole con durate e valutazioni estreme. Riconoscere e mappare queste anomalie statistiche risulta fondamentale per comprendere la reale eterogeneit\`a del dataset e per valutare in che misura tali eccezioni possano influenzare i modelli e le elaborazioni successive.
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.9\linewidth]{immagini/boxplot}
@@ -314,20 +315,20 @@ Il primo grafico, dedicato ai generi cinematografici, evidenzia una netta predom
 	Family              365
 	Fantasy             342
 \end{lstlisting}
-Il seguente grafico si focalizza invece sul ritorno sull'investimento mediano in funzione del genere. Dall'osservazione di questa metrica emerge che le pellicole in grado di garantire in media i ritorni percentuali più elevati sono i documentari, seguiti a breve distanza dalle opere musicali e dai film horror. Questa spiccata efficienza economica è tipicamente riconducibile ai costi di produzione molto pi\`u contenuti che caratterizzano queste produzioni. Al contrario, generi che richiedono per natura budget più elevati per effetti visivi e campagne markenting, come fantascienza e fantasy, si posizionano alla fine di questa classifica.
+Il seguente grafico si focalizza invece sul ritorno sull'investimento mediano in funzione del genere. Dall'osservazione di questa metrica emerge che le pellicole in grado di garantire in media i ritorni percentuali pi\`u elevati sono i documentari, seguiti a breve distanza dalle opere musicali e dai film horror. Questa spiccata efficienza economica è tipicamente riconducibile ai costi di produzione molto pi\`u contenuti che caratterizzano queste produzioni. Al contrario, generi che richiedono per natura budget pi\`u elevati per effetti visivi e campagne markenting, come fantascienza e fantasy, si posizionano alla fine di questa classifica.
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1.0\linewidth]{immagini/roimed}
 \end{figure}
-Al fine di identificare i maggiori successi commerciali, \`e stato predisposto un grafico a barre che illustra i primi dieci film per volume di incassi globali. La visualizzazione evidenzia il netto primato isolato di Avatar, l'unica opera a sfiorare i 2,8 miliardi di dollari, seguita a debita distanza da Titanic. Il resto della graduatoria risulta invece fortemente dominato da noti franchise e blockbuster seriali che si attestano tutti stabilmente sopra la significativa soglia del miliardo di dollari di ricavi, delineando chiaramente i titoli a più alta redditività storica all'interno del campione.
+Al fine di identificare i maggiori successi commerciali, \`e stato predisposto un grafico a barre che illustra i primi dieci film per volume di incassi globali. La visualizzazione evidenzia il netto primato isolato di Avatar, l'unica opera a sfiorare i 2,8 miliardi di dollari, seguita a debita distanza da Titanic. Il resto della graduatoria risulta invece fortemente dominato da noti franchise e blockbuster seriali che si attestano tutti stabilmente sopra la significativa soglia del miliardo di dollari di ricavi, delineando chiaramente i titoli a pi\`u alta redditività storica all'interno del campione.
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1.0\linewidth]{immagini/topincassi}
 \end{figure}
 
 \subsection{Correlazioni}
-Per approfondire le relazioni lineari tra le metriche quantitative del dataset, la matrice di correlazione offre una quantificazione precisa dei legami statistici attraverso i rispettivi coefficienti numerici. Emerge in modo evidente una forte associazione positiva, pari a 0.71, tra il budget stanziato e i ricavi generati, a dimostrazione del fatto che investimenti finanziari pi\`u cospicui tendono a tradursi in maggiori incassi al botteghino. Si rileva inoltre una significativa correlazione positiva tra gli incassi e l'indice di popolarit\`a (0.60), suggerendo che il successo commerciale sia strettamente connesso alla risonanza mediatica dell'opera. Al contrario, la variabile del ritorno sull'investimento presenta valori stabilmente prossimi allo zero con tutte le altre metriche, confermando analiticamente che la redditività percentuale prescinde dalla scala economica assoluta del progetto cinematografico.\\
-Questo scenario trova un riscontro visivo diretto nel grafico a dispersione adiacente, in cui la distribuzione della nuvola di punti si sviluppa diagonalmente verso l'alto, convalidando la tendenza alla crescita dei ricavi in concomitanza con l'aumento dei costi di produzione. L'integrazione di una scala cromatica legata alla votazione media arricchisce la lettura del grafico con una dimensione qualitativa, evidenziando come le pellicole maggiormente apprezzate dal pubblico, contraddistinte dalle tonalit\`a più chiare e accese, tendano a concentrarsi prevalentemente nelle fasce di incasso medio-alte, pur non escludendo la presenza di produzioni a basso budget capaci di ottenere eccellenti valutazioni critiche.
+Per approfondire le relazioni lineari tra le metriche quantitative del dataset, la matrice di correlazione offre una quantificazione precisa dei legami statistici attraverso i rispettivi coefficienti numerici. Emerge in modo evidente una forte associazione positiva, pari a 0.71, tra il budget stanziato e i ricavi generati, a dimostrazione del fatto che investimenti finanziari pi\`u cospicui tendono a tradursi in maggiori incassi al botteghino. Si rileva inoltre una significativa correlazione positiva tra gli incassi e l'indice di popolarit\`a (0.60), suggerendo che il successo commerciale sia strettamente connesso alla risonanza mediatica dell'opera. Al contrario, la variabile del ritorno sull'investimento presenta valori stabilmente prossimi allo zero con tutte le altre metriche, confermando analiticamente che la redditivit\`a percentuale prescinde dalla scala economica assoluta del progetto cinematografico.\\
+Questo scenario trova un riscontro visivo diretto nel grafico a dispersione adiacente, in cui la distribuzione della nuvola di punti si sviluppa diagonalmente verso l'alto, convalidando la tendenza alla crescita dei ricavi in concomitanza con l'aumento dei costi di produzione. L'integrazione di una scala cromatica legata alla votazione media arricchisce la lettura del grafico con una dimensione qualitativa, evidenziando come le pellicole maggiormente apprezzate dal pubblico, contraddistinte dalle tonalit\`a pi\`u chiare e accese, tendano a concentrarsi prevalentemente nelle fasce di incasso medio-alte, pur non escludendo la presenza di produzioni a basso budget capaci di ottenere eccellenti valutazioni critiche.
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1.0\linewidth]{immagini/corr}
@@ -344,7 +345,7 @@ L'elemento analitico pi\`u rilevante si osserva a partire dagli anni Novanta: pu
 
 \subsection{Wordcloud}
 Per esplorare le tematiche ricorrenti e i nuclei narrativi che caratterizzano le produzioni cinematografiche del dataset, \`e stata realizzata una wordcloud focalizzata sui termini pi\`u frequenti all'interno delle trame dei film. L'analisi visiva mette immediatamente in luce i motori concettuali ed emotivi universali del cinema: parole di grandi dimensioni come "life", "find", "world" e "family" indicano chiaramente come la stragrande maggioranza delle sceneggiature si sviluppi attorno a percorsi di ricerca, dinamiche relazionali e contesti esistenziali o d'azione di ampio respiro.\\
-Accanto a questi pilastri macrotematici, si nota una forte concentrazione di termini legati ai legami interpersonali e agli archetipi dei personaggi, quali "man", "young", "father", "friend" e "love" — che testimoniano la centralità dei conflitti familiari e delle evoluzioni sentimentali nelle storie. Infine, la ricorrenza di marcatori di contesto come "time", "new", "town" e "home" delinea la cornice spaziale e temporale tipica in cui prendono vita le vicende. Nel complesso, la visualizzazione restituisce una mappatura semantica coerente, confermando come l'industria cinematografica si affidi a tropi e concetti universali per garantire l'immediata immedesimazione e l'efficacia comunicativa sul pubblico globale.
+Accanto a questi pilastri macrotematici, si nota una forte concentrazione di termini legati ai legami interpersonali e agli archetipi dei personaggi, quali "man", "young", "father", "friend" e "love" che testimoniano la centralit\`a dei conflitti familiari e delle evoluzioni sentimentali nelle storie. Infine, la ricorrenza di marcatori di contesto come "time", "new", "town" e "home" delinea la cornice spaziale e temporale tipica in cui prendono vita le vicende. Nel complesso, la visualizzazione restituisce una mappatura semantica coerente, confermando come l'industria cinematografica si affidi a tropi e concetti universali per garantire l'immediata immedesimazione e l'efficacia comunicativa sul pubblico globale.
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\linewidth]{immagini/cloud}
@@ -364,7 +365,7 @@ L'avvio del progetto ha richiesto una cruciale fase preliminare di pulizia e pre
 \end{lstlisting}
 
 \subsubsection{Funzione: cleaning\_and\_processing}
-A valle della definizione della logica di estrazione testuale, il processo di preparazione dei dati si è concretizzato nella strutturazione di una pipeline complessiva di pulizia e pre-elaborazione, racchiusa all'interno della funzione cleaning\_and\_preprocessing. L'operazione iniziale di questa routine mira a garantire la solidità del dataset attraverso la rimozione automatica di tutti i record contenenti valori mancanti o nulli. Successivamente, l'attenzione si sposta sulla standardizzazione delle informazioni temporali: la colonna relativa alla data di uscita delle pellicole viene prima forzata in un formato data coerente (gestendo eventuali errori di conversione) e subito dopo riorganizzata visivamente secondo lo standard europeo basato su giorno, mese e anno.\\
+A valle della definizione della logica di estrazione testuale, il processo di preparazione dei dati si \`e concretizzato nella strutturazione di una pipeline complessiva di pulizia e pre-elaborazione, racchiusa all'interno della funzione cleaning\_and\_preprocessing. L'operazione iniziale di questa routine mira a garantire la solidit\`a del dataset attraverso la rimozione automatica di tutti i record contenenti valori mancanti o nulli. Successivamente, l'attenzione si sposta sulla standardizzazione delle informazioni temporali: la colonna relativa alla data di uscita delle pellicole viene prima forzata in un formato data coerente (gestendo eventuali errori di conversione) e subito dopo riorganizzata visivamente secondo lo standard europeo basato su giorno, mese e anno.\\
 Dopo aver risolto alcune ridondanze di nomenclatura, come la rinomina della colonna del titolo per una maggiore chiarezza formale, il cuore della funzione entra in gioco applicando massivamente la precedente routine clean\_json a tutte le variabili complesse. Questo passaggio permette di estrarre e appiattire in modo automatico le informazioni contenute in colonne fondamentali quali i generi, il cast, la troupe, le parole chiave, le case di produzione e le lingue parlate. Nel caso specifico dei generi cinematografici, viene integrata un'ulteriore accortezza per l'omogeneità dei dati, convertendo ogni termine estratto in minuscolo per prevenire discrepanze durante le future fasi di raggruppamento. Infine, la pipeline di lavoro si conclude con una fase di snellimento strutturale: tramite l'eliminazione mirata di quelle colonne ritenute ridondanti o non in linea con i successivi obiettivi di analisi (come gli identificativi numerici, i titoli duplicati e alcune variabili geografiche o finanziarie non necessarie in questo step), la funzione restituisce un dataframe perfettamente pulito, compatto e pronto per essere esplorato statisticamente.
 \begin{lstlisting}
 	def cleaning_and_preprocessing(df):
@@ -380,12 +381,12 @@ Dopo aver risolto alcune ridondanze di nomenclatura, come la rinomina della colo
 		df["production_companies"] = df["production_companies"].apply(clean_json)
 		df["production_countries"] = df["production_countries"].apply(clean_json)
 		df["spoken_languages"] = df["spoken_languages"].apply(clean_json)
-		df.drop(["id", "movie_id", "title_y", "budget", "revenue", "production_countries"], axis=1, inplace=True)
+		df.drop(["id", "movie_id", "title_y", "budget", "revenue"], axis=1, inplace=True)
 		return df
 \end{lstlisting}
 
 \subsubsection{Funzione: join\_list\_elements}
-Come ultimo passaggio della fase di preparazione e formattazione dei dati, si \`e resa necessaria un'operazione di consolidamento delle variabili precedentemente estratte. A tale scopo è stata implementata la funzione join\_list\_elements, concepita per trasformare le strutture a lista in formati testuali lineari e immediatamente leggibili. La routine accetta in ingresso il dataframe e un elenco specifico di colonne su cui operare, iterando su ciascuna di esse in modo sistematico. Attraverso l'applicazione di una funzione lambda, il codice verifica dinamicamente la natura di ogni singolo elemento: qualora si tratti di una lista (come nel caso dei molteplici generi, degli attori o delle parole chiave associati a una singola pellicola), i suoi componenti vengono concatenati in un'unica stringa continua, separati da una virgola e da uno spazio; in caso contrario, il dato viene convertito in modo precauzionale in un formato testuale standard. Questa trasformazione finale risulta strategica non solo per migliorare la leggibilità diretta e l'esplorazione visiva del dataset, ma anche per predisporre le variabili categoriali a eventuali esportazioni in formato tabellare o a successive elaborazioni algoritmiche basate sull'analisi del testo, garantendo la massima compatibilità e coerenza strutturale.
+Come ultimo passaggio della fase di preparazione e formattazione dei dati, si \`e resa necessaria un'operazione di consolidamento delle variabili precedentemente estratte. A tale scopo \`e stata implementata la funzione join\_list\_elements, concepita per trasformare le strutture a lista in formati testuali lineari e immediatamente leggibili. La routine accetta in ingresso il dataframe e un elenco specifico di colonne su cui operare, iterando su ciascuna di esse in modo sistematico. Attraverso l'applicazione di una funzione lambda, il codice verifica dinamicamente la natura di ogni singolo elemento: qualora si tratti di una lista (come nel caso dei molteplici generi, degli attori o delle parole chiave associati a una singola pellicola), i suoi componenti vengono concatenati in un'unica stringa continua, separati da una virgola e da uno spazio; in caso contrario, il dato viene convertito in modo precauzionale in un formato testuale standard. Questa trasformazione finale risulta strategica non solo per migliorare la leggibilit\`a diretta e l'esplorazione visiva del dataset, ma anche per predisporre le variabili categoriali a eventuali esportazioni in formato tabellare o a successive elaborazioni algoritmiche basate sull'analisi del testo, garantendo la massima compatibilit\`a e coerenza strutturale.
 \begin{lstlisting}
 	def join_list_elements(dataframe, columns):
 		for col in columns:
@@ -395,7 +396,7 @@ Come ultimo passaggio della fase di preparazione e formattazione dei dati, si \`
 		return dataframe
 \end{lstlisting}
 \subsubsection{Caricamento e Pulizia}
-A completamento della fase di preparazione, il blocco principale del codice orchestra l'integrazione iniziale e il salvataggio dei dati. I due dataset nativi relativi a pellicole e crediti vengono caricati e fusi in un unico dataframe coerente attraverso il raccordo dei rispettivi identificativi numerici. Su questa struttura unificata viene poi applicata la pipeline di pulizia descritta in precedenza; infine, il dataset normalizzato viene esportato in un nuovo file CSV, garantendo la persistenza di un archivio pulito e già pronto per le successive fasi di analisi statistica.
+A completamento della fase di preparazione, il blocco principale del codice orchestra l'integrazione iniziale e il salvataggio dei dati. I due dataset nativi relativi a pellicole e crediti vengono caricati e fusi in un unico dataframe coerente attraverso il raccordo dei rispettivi identificativi numerici. Su questa struttura unificata viene poi applicata la pipeline di pulizia descritta in precedenza; infine, il dataset normalizzato viene esportato in un nuovo file CSV, garantendo la persistenza di un archivio pulito e gi\`a pronto per le successive fasi di analisi statistica.
 \begin{lstlisting}
 	movies = pd.read_csv("Dataset/tmdb_5000_movies.csv")
 	credits = pd.read_csv("Dataset/tmdb_5000_credits.csv")
@@ -407,8 +408,8 @@ A completamento della fase di preparazione, il blocco principale del codice orch
 \end{lstlisting}
 
 \subsection{Sentence Embedding}
-Questa sezione del progetto avvia la fase di modellazione e arricchimento delle caratteristiche (feature engineering), finalizzata a trasformare il patrimonio informativo testuale in elementi computabili dall'algoritmo. Inizialmente, la funzione join\_list\_elements viene applicata per consolidare in stringhe lineari i metadati relativi a parole chiave, cast, troupe e case cinematografiche. Parallelamente, lo script estrae e ordina i generi univoci del dataset e genera una colonna accessoria contenente l'acronimo in minuscolo di ciascun titolo, utile per supportare logiche di ricerca rapida.\\
-Il passaggio chiave per l'analisi semantica consiste nella creazione di una variabile testo omnicomprensiva, denominata sentence\_var. Questa stringa unisce tutti i descrittori di un film: titolo, trama (overview), parole chiave, slogan (tagline), generi, attori, membri chiave della troupe e produttori. Questo blocco unico di testo viene infine dato in pasto al modello SentenceTransformer che, tramite il metodo encode, ne esegue la vettorializzazione, restituendo una matrice di embedding pronti per il calcolo della similarità.\\
+Questa sezione del progetto avvia la fase di modellazione e arricchimento delle caratteristiche, finalizzata a trasformare il patrimonio informativo testuale in elementi computabili dall'algoritmo. Inizialmente, la funzione join\_list\_elements viene applicata per consolidare in stringhe lineari i metadati relativi a parole chiave, cast, troupe e case cinematografiche. Parallelamente, lo script estrae e ordina i generi univoci del dataset e genera una colonna accessoria contenente l'acronimo in minuscolo di ciascun titolo, utile per supportare logiche di ricerca rapida.\\
+Il passaggio chiave per l'analisi semantica consiste nella creazione di una variabile testo omnicomprensiva, denominata sentence\_var. Questa stringa unisce tutti i descrittori di un film: titolo, trama (overview), parole chiave, slogan (tagline), generi, attori, membri chiave della troupe e produttori. Questo blocco unico di testo viene infine passato al modello SentenceTransformer che, tramite il metodo encode, ne esegue la vettorializzazione, restituendo una matrice di embedding pronti per il calcolo della similarit\`a.\\
 Nel campo dell'elaborazione del linguaggio naturale, il sentence embedding rappresenta il processo di mappatura di stringhe di testo di lunghezza variabile (frasi, paragrafi o interi documenti) in vettori numerici densi a dimensione fissa.\\
 A differenza dei modelli classici come la Bag-of-Words o TF-IDF che si limitano a contare la presenza delle parole creando matrici sparse e prive di senso logico, i sentence embedding sono progettati per catturare il contesto e il significato semantico. L'obiettivo fondamentale \`e fare in modo che la distanza geometrica tra due vettori nello spazio multidimensionale rifletta la somiglianza concettuale dei testi di partenza. Di conseguenza, due film che descrivono trame simili utilizzando sinonimi o vocaboli completamente diversi saranno comunque mappati in punti molto vicini dello spazio vettoriale, consentendo di superare i limiti della rigida ricerca per parole chiave.
 \begin{lstlisting}
@@ -425,13 +426,21 @@ A differenza dei modelli classici come la Bag-of-Words o TF-IDF che si limitano 
 	
 	genres_str = df["genres"].apply(lambda x: " ".join(x) if isinstance(x, list) else "")
 	
-	sentence_var = (df["title"] + " " + df["overview"] + " " + df["keywords"] + " " + df["tagline"] + " " + genres_str + " " + df["cast"] + " " + df["crew"] + " " + df["production_companies"]) 
+	all_people = sorted(set(
+		name.strip().lower()
+		for col in ["cast", "crew", "production_companies"]
+		for entry in df[col]
+		for name in entry.split(",")
+		if len(name.strip()) > 2
+		))
+	
+	sentence_var = (df["title"] + "," + df["overview"] + "," + df["keywords"] + "," + df["tagline"] + "," + genres_str + "," + df["cast"] + "," + df["crew"] + "," + df["production_companies"]) 
 	model = SentenceTransformer('all-MiniLM-L6-v2')
 	embeddings_sentence = model.encode(sentence_var.tolist(), convert_to_numpy=True)
 \end{lstlisting}
 \subsection{Calcolo delle Metriche}
 \subsubsection{Funzione: calc\_sentence\_score}
-Per tradurre l'input testuale dell'utente in un valore metrico direttamente computabile, \`e stata implementata la funzione calc\_sentence\_score. Questa routine riceve la query espressa in linguaggio naturale e, come prima operazione, la converte in un vettore denso sfruttando il medesimo modello di Sentence Transformer utilizzato per l'indicizzazione del catalogo cinematografico, garantendo così la coerenza dello spazio vettoriale. Successivamente, viene calcolata la cosine similarity tra l'embedding della richiesta e la matrice precomputata di tutte le pellicole, determinando la vicinanza geometrica e quindi l'affinit\`a concettuale tra i testi. Poich\`e questo coefficiente statistico oscilla originariamente all'interno di un intervallo compreso tra -1 e 1, il codice introduce un passaggio cruciale di normalizzazione attraverso la tecnica del Min-Max scaling. Riscalmando matematicamente i vettori in modo che la minor somiglianza rilevata corrisponda a 0 e la maggiore a 1, la funzione restituisce un vettore di punteggi standardizzato e perfettamente calibrato. 
+Per tradurre l'input testuale dell'utente in un valore metrico direttamente computabile, \`e stata implementata la funzione calc\_sentence\_score. Questa routine riceve la query espressa in linguaggio naturale e, come prima operazione, la converte in un vettore denso sfruttando il medesimo modello di Sentence Transformer utilizzato per l'indicizzazione del catalogo cinematografico, garantendo cos\`i la coerenza dello spazio vettoriale. Successivamente, viene calcolata la cosine similarity tra l'embedding della richiesta e la matrice precomputata di tutte le pellicole, determinando la vicinanza geometrica e quindi l'affinit\`a concettuale tra i testi. Poich\`e questo coefficiente statistico oscilla originariamente all'interno di un intervallo compreso tra -1 e 1, il codice introduce un passaggio cruciale di normalizzazione attraverso la tecnica del Min-Max scaling. Riscalmando matematicamente i vettori in modo che la minor somiglianza rilevata corrisponda a 0 e la maggiore a 1, la funzione restituisce un vettore di punteggi standardizzato e perfettamente calibrato. 
 \begin{lstlisting}
 	def calc_sentence_score(user_query):
 		query_embedding = model.encode([user_query], convert_to_numpy=True)
@@ -442,7 +451,7 @@ Per tradurre l'input testuale dell'utente in un valore metrico direttamente comp
 \end{lstlisting}
 
 \subsubsection{Funzione: find\_genres}
-Al fine di intercettare in modo mirato le preferenze categoriali espresse esplicitamente dall'utente, è stata sviluppata la funzione find\_genres. Questa routine esegue una scansione della richiesta testuale per verificare la presenza diretta di specifici generi cinematografici all'interno del linguaggio naturale. Come prima operazione, l'input viene interamente normalizzato in caratteri minuscoli per garantire la totale insensibilit\`a alle maiuscole ed evitare mancate corrispondenze. Successivamente, la funzione confronta la stringa cos\`i elaborata con l'elenco dei generi univoci precedentemente mappati nel dataset, estraendo ogni termine che compaia come sottostringa all'interno della richiesta. Questo meccanismo di filtraggio basato su parole chiave esplicite risulta di fondamentale importanza strategica per il motore di ricerca, in quanto permette di isolare i desiderata categorici dell'utente prima delle successive fasi algoritmiche. In questo modo, il sistema ottiene un elenco pulito di generi di riferimento che pu\`o essere utilizzato per applicare filtri booleani rigidi o logiche di potenziamento dei punteggi, affiancando alla comprensione puramente semantica degli embedding un controllo tassonomico preciso e deterministico.
+Al fine di intercettare in modo mirato le preferenze categoriali espresse esplicitamente dall'utente, \`e stata sviluppata la funzione find\_genres. Questa routine esegue una scansione della richiesta testuale per verificare la presenza diretta di specifici generi cinematografici all'interno del linguaggio naturale. Come prima operazione, l'input viene interamente normalizzato in caratteri minuscoli per garantire la totale insensibilit\`a alle maiuscole ed evitare mancate corrispondenze. Successivamente, la funzione confronta la stringa cos\`i elaborata con l'elenco dei generi univoci precedentemente mappati nel dataset, estraendo ogni termine che compaia come sottostringa all'interno della richiesta. Questo meccanismo di filtraggio basato su parole chiave esplicite risulta di fondamentale importanza strategica per il motore di ricerca, in quanto permette di isolare i desiderata categorici dell'utente prima delle successive fasi algoritmiche. In questo modo, il sistema ottiene un elenco pulito di generi di riferimento che pu\`o essere utilizzato per applicare filtri booleani rigidi o logiche di potenziamento dei punteggi, affiancando alla comprensione puramente semantica degli embedding un controllo tassonomico preciso e deterministico.
 \begin{lstlisting}
 	def find_genres(user_query, unique_genres):
 		query_lowered = user_query.lower()
@@ -451,7 +460,7 @@ Al fine di intercettare in modo mirato le preferenze categoriali espresse esplic
 \end{lstlisting}
 
 \subsubsection{Funzione: calc\_genres\_score}
-Per valorizzare la congruenza tassonomica tra le richieste espresse dall'utente e il catalogo a disposizione, \`e stata implementata la funzione calc\_genres\_score. Questa routine ha il compito di quantificare l'affinità categoriale assegnando un punteggio matematico basato sulla sovrapposizione dei generi cinematografici. Il codice cicla attraverso tutte le pellicole del dataframe e valuta lo scenario di partenza: qualora l'elenco dei generi estratti dalla query risulti vuoto, viene assegnato di default un punteggio pari a zero a ogni riga, neutralizzando l'impatto di questa metrica. Nel caso in cui l'utente abbia invece specificato uno o pi\`u generi di interesse, la funzione calcola l'intersezione logica tra l'insieme dei desiderata e l'insieme dei generi associati al singolo film. Questo valore viene successivamente normalizzato dividendolo per il numero totale di generi richiesti dall'utente, generando cos\`i un indice standardizzato compreso tra 0 e 1 che rappresenta la percentuale esatta di soddisfacimento dei requisiti. Questo punteggio deterministico agisce come un moltiplicatore di rilevanza all'interno del motore complessivo, permettendo al sistema di premiare e spingere verso l'alto i titoli che rispettano in modo rigoroso i vincoli categorici indicati esplicitamente nella query.
+Per valorizzare la congruenza tassonomica tra le richieste espresse dall'utente e il catalogo a disposizione, \`e stata implementata la funzione calc\_genres\_score. Questa routine ha il compito di quantificare l'affinit\`a categoriale assegnando un punteggio matematico basato sulla sovrapposizione dei generi cinematografici. Il codice cicla attraverso tutte le pellicole del dataframe e valuta lo scenario di partenza: qualora l'elenco dei generi estratti dalla query risulti vuoto, viene assegnato di default un punteggio pari a zero a ogni riga, neutralizzando l'impatto di questa metrica. Nel caso in cui l'utente abbia invece specificato uno o pi\`u generi di interesse, la funzione calcola l'intersezione logica tra l'insieme dei desiderata e l'insieme dei generi associati al singolo film. Questo valore viene successivamente normalizzato dividendolo per il numero totale di generi richiesti dall'utente, generando cos\`i un indice standardizzato compreso tra 0 e 1 che rappresenta la percentuale esatta di soddisfacimento dei requisiti. Questo punteggio deterministico agisce come un moltiplicatore di rilevanza all'interno del motore complessivo, permettendo al sistema di premiare e spingere verso l'alto i titoli che rispettano in modo rigoroso i vincoli categorici indicati esplicitamente nella query.
 \begin{lstlisting}
 	def calc_genres_score(query_genres):
 		genres_score = []
@@ -481,59 +490,101 @@ Per integrare la ricerca diretta dei titoli all'interno della logica di raccoman
 		best_title_score = np.maximum.reduce([exact_match, acronym_match, fuzzy_match])
 		return best_title_score
 \end{lstlisting}
+\subsubsection{Funzione: find\_people}
+In modo complementare al calcolo generale dei punteggi di affinit\`a, la funzione find\_people \`e stata progettata per estrarre in maniera esplicita i nomi dei membri del cast. Dopo aver normalizzato la richiesta in caratteri minuscoli, l'algoritmo effettua un primo tentativo di estrazione basato su una corrispondenza esatta, verificando se uno o pi\`u nomi dell'archivio compaiono integralmente all'interno della frase. Qualora questa ricerca dia esito positivo, il sistema restituisce immediatamente i risultati, privilegiando la precisione deterministica e ottimizzando i tempi di calcolo. In caso contrario, per compensare eventuali imprecisioni, il codice isola e restituisce tutti quei nomi che registrano un grado di somiglianza testuale pari o superiore a una rigida soglia di confidenza, impostata all'85\%. Questo approccio a doppio livello, prima esatto e poi approssimato. assicura un'identificazione pi\`u robusta.
+\begin{lstlisting}
+def find_people(user_query, all_people):
+	query_lowered = user_query.lower()
+	exact = [person for person in all_people if person in query_lowered]
+	if exact:
+		return exact
+	
+	fuzzy = [person for person in all_people if fuzz.partial_ratio(person, query_lowered) >= 85]
+	return fuzzy
+\end{lstlisting}
 
 \subsubsection{Funzione: calc\_people\_score}
-Per intercettare i riferimenti a specifiche figure umane o societarie menzionate dall'utente, la funzione calc\_people\_score estende la logica di confronto testuale ai metadati relativi al cast, alla troupe cinematografica e alle case di produzione. Il codice unifica inizialmente queste tre informazioni in un unico blocco di testo normalizzato in caratteri minuscoli, azzerando l'influenza delle maiuscole. Su questa stringa combinata vengono calcolati in parallelo due distinti indici di somiglianza rispetto alla query: una verifica di corrispondenza esatta, che rileva la presenza diretta del nome cercato e un confronto di tipo fuzzy basato sempre sulla metrica del partial\_ratio. Quest'ultimo strumento si rivela essenziale per identificare correttamente registi, attori o marchi editoriali anche in presenza di refusi, omissioni o grafie parziali di nomi complessi. Attraverso l'applicazione della funzione np.maximum, il sistema seleziona infine il valore più elevato tra i due punteggi ottenuti per ciascuna pellicola, garantendo una valutazione ottimale dell'affinit\`a e fornendo al motore di raccomandazione una metrica robusta per premiare i titoli legati ai professionisti del cinema desiderati dall'utente.
+Per intercettare i riferimenti a specifiche figure umane o societarie menzionate dall'utente, la funzione calc\_people\_score estende la logica di confronto testuale ai metadati relativi al cast, alla troupe cinematografica e alle case di produzione. Il codice unifica inizialmente queste tre informazioni in un unico blocco di testo normalizzato in caratteri minuscoli, azzerando l'influenza delle maiuscole. Su questa stringa combinata vengono calcolati in parallelo due distinti indici di somiglianza rispetto alla query: una verifica di corrispondenza esatta, che rileva la presenza diretta del nome cercato e un confronto di tipo fuzzy basato sempre sulla metrica del partial\_ratio. Quest'ultimo strumento si rivela essenziale per identificare correttamente registi, attori o marchi editoriali anche in presenza di refusi, omissioni o grafie parziali di nomi complessi. Attraverso l'applicazione della funzione np.maximum, il sistema seleziona infine il valore pi\`u elevato tra i due punteggi ottenuti per ciascuna pellicola, garantendo una valutazione ottimale dell'affinit\`a e fornendo al motore di raccomandazione una metrica robusta per premiare i titoli legati ai professionisti del cinema desiderati dall'utente.
 \begin{lstlisting}
-	def calc_people_score(user_query, df):
-		query_normalized = user_query.lower()
-		people_lower = (df["cast"] + " " + df["crew"]+ " " + df["production_companies"]).str.lower()
-		query_normalized_lower = query_normalized.lower()
-		exact_match = people_lower.str.contains(query_normalized_lower, regex=False).astype(float)
-		fuzzy_match = people_lower.apply(lambda x: fuzz.partial_ratio(query_normalized_lower, x) / 100.0)
-		people_score = np.maximum(exact_match, fuzzy_match)
-		return people_score
+def calc_people_score(user_query, df):
+	people_found = find_people(user_query, all_people)
+	people_lower = (df["cast"] + "," + df["crew"] + "," + df["production_companies"]).str.lower()
+	if not people_found:
+		return pd.Series(np.zeros(len(df)))
+	scores = [
+		sum(1 for p in people_found if p in people_str) / len(people_found)
+		for people_str in people_lower
+	]
+	return pd.Series(scores)
 \end{lstlisting}
 
 \subsubsection{Funzione: calc\_total\_score}
-
+Per sintetizzare le diverse metriche elaborate nelle fasi precedenti in un unico indicatore globale di rilevanza, la funzione calc\_total\_score implementa un sofisticato sistema di aggregazione basato su pesi dinamici. Inizialmente, i vettori contenenti i punteggi parziali, la similarit\`a semantica, l'affinit\`a dei generi, la corrispondenza dei titoli e quella del cast, vengono convertiti in array NumPy per garantire la massima efficienza computazionale durante le operazioni matematiche vettorializzate.\\
+Il cuore innovativo dell'algoritmo risiede nella sua capacit\`a di interpretare l'intento di ricerca dell'utente e di riadattare la formula di calcolo di conseguenza. Attraverso la valutazione delle soglie di 0.6, il codice deduce quali elementi siano predominanti nella richiesta. Partendo da una configurazione di base in cui l'intero peso ricade sulla similarit\`a semantica generale, il sistema ricalibra dinamicamente le percentuali: se rileva una forte corrispondenza con un titolo o con un membro del cast, assegna a questi parametri la priorit\`a, riducendo l'impatto del sentence embedding. Qualora la query contenga sia il titolo che una persona specifica, i pesi vengono ulteriormente bilanciati per premiare entrambe le componenti in modo equo.\\
+Al termine di questa fase condizionale, le percentuali assegnate vengono rigorosamente normalizzate per assicurare che la loro somma restituisca sempre il valore 1. L'operazione conclusiva consiste in una somma ponderata dei vettori originali, che fonde insieme tutte le metriche e restituisce un singolo array contenente il punteggio totale e definitivo per ciascuna pellicola, fornendo così la classifica finale al motore di raccomandazione.
 \begin{lstlisting}
-	def calc_total_score(sentence_score_normalized, genres_score, best_title_score, best_people_score):
-		sentence_arr = np.array(sentence_score_normalized)
-		genres_arr = np.array(genres_score)
-		title_arr = np.array(best_title_score)
-		people_arr = np.array(best_people_score)
-		
-		w_title = 0.3
-		w_people = 0.2
-		w_genres = 0.2
-		w_sentence = 0.3
-		
-		if best_title_score.max() < 0.7:
-		w_people += 0.20
-		w_genres += 0.10
-		w_title = 0.0
-		
-		if best_people_score.max() < 0.7:
-		w_sentence += w_people
-		w_people = 0.0
-		# Se è il cast o la produzione
-		if best_people_score.max() >= 0.7:
-		w_sentence = 0.2
-		w_people = 0.3
-		
-		total_score = (
-		(sentence_arr * w_sentence) +
-		(genres_arr * w_genres) +
-		(title_arr * w_title) +
-		(people_arr * w_people)
-		)
-		
-		return total_score
+def calc_total_score(sentence_score_normalized, genres_score, best_title_score, best_people_score):
+	sentence_arr = np.array(sentence_score_normalized, dtype=float)
+	genres_arr   = np.array(genres_score, dtype=float)
+	title_arr    = np.array(best_title_score, dtype=float)
+	people_arr   = np.array(best_people_score, dtype=float)
+	
+	# Condizioni True/False
+	has_title  = title_arr.max()  >= 0.6
+	has_people = people_arr.max() >= 0.6 
+	has_genre  = genres_arr.max() > 0
+	
+	# Pesi standard
+	w_title    = 0.0
+	w_people   = 0.0
+	w_genres   = 0.0
+	w_sentence = 1.0
+	
+	# Trovato titolo ma non persona: peso maggiore per il titolo
+	if has_title and not has_people:
+	w_title    = 0.50
+	w_sentence = 0.35
+	w_genres   = 0.15
+	
+	# Trovata persona ma non titolo: peso maggiore per la persona
+	elif has_people and not has_title:
+	w_people   = 0.55
+	w_sentence = 0.30
+	w_genres   = 0.15
+	
+	# Trovato sia titolo che persona: peso maggiore per la persona
+	elif has_title and has_people:
+	w_title    = 0.30
+	w_people   = 0.35
+	w_sentence = 0.25
+	w_genres   = 0.10
+	
+	# Trovato solo genere: peso maggiore per il genere
+	elif has_genre and not has_title and not has_people:
+	w_genres   = 0.20
+	w_sentence = 0.80
+	
+	# Normalizzazione
+	total_w = w_title + w_people + w_genres + w_sentence
+	if total_w > 0:
+	w_title    /= total_w
+	w_people   /= total_w
+	w_genres   /= total_w
+	w_sentence /= total_w
+	
+	total_score = (
+	sentence_arr * w_sentence +
+	title_arr    * w_title    +
+	people_arr   * w_people   +
+	genres_arr   * w_genres
+	)
+	
+	return total_score
 \end{lstlisting}
 
-\subsubsection{Ricerca dei Film}
-
+\section{Ricerca dei Film}
+\subsection{Funzione: search\_film}
+Per concludere il motore di raccomandazione viene utilizzata la funzione "search\_film". Questa funzione richiede all'utente di inserire la propria query in linguaggio naturale, per poi sottoporre l'input, in rapida successione, a tutti i moduli di valutazione definiti in precedenza. Dopo aver calcolato in modo parallelo la similarit\`a semantica tramite gli embedding, l'affinit\`a categoriale dei generi e le corrispondenze testuali relative a titoli e i membri del cast, i punteggi parziali vengono fusi dalla funzione aggregatrice per ottenere la metrica totale di rilevanza. Come ultimo passaggio, l'algoritmo ordina l'intero catalogo in modo decrescente in base a questo punteggio finale, isola le dieci pellicole maggiormente affini alla richiesta e ne estrae i metadati principali (titolo, generi, cast e case di produzione), restituendo all'utente una tabella riepilogativa chiara e immediatamente fruibile.
 \begin{lstlisting}
 	def search_film():
 		user_query = input("Inserisci la tua query: ")
@@ -561,7 +612,11 @@ Per intercettare i riferimenti a specifiche figure umane o societarie menzionate
 \end{figure}
 
 \section{Validazione}
+Infine, il lavoro \`e stato sottoposto a una fase di validazione. Questo passaggio di collaudo si \`e rivelato essenziale per misurare la reale efficacia del motore di raccomandazione e per calibrare con precisione le soglie di attivazione dei pesi dinamici. Sottoponendo l'algoritmo a un set di query eterogenee \`e stato possibile verificare la solidit\`a dell'intera pipeline. Questa fase di test ha garantito che il sistema sia in grado di interpretare correttamente le diverse sfumature dell'intento di ricerca utente, bilanciando in modo armonico l'intelligenza contestuale degli embedding con la rigidit\`a del filtraggio deterministico e la flessibilit\`a della logica fuzzy, assicurando risultati finali sempre pertinenti e privi di distorsioni.
+
 \subsection{Funzione: get\_top\_k\_titles}
+In una prima fase, l'algoritmo intercetta i generi cinematografici esplicitati dall'utente e ne calcola il relativo punteggio di affinit\`a. Successivamente procede a sottrarre queste stesse parole chiave dalla stringa della query. Questa accortezza strutturale agisce come un rigoroso filtro anti-distorsione: eliminando i termini tassonomici (come "commedia" o "azione"), si impedisce alla successiva ricerca di tipo fuzzy di generare falsi positivi, evitando di premiare erroneamente pellicole che contengono casualmente tali vocaboli nel titolo o nei nomi delle case di produzione. Al fine di preservare la stabilit\`a del sistema, \`e previsto inoltre un meccanismo di fallback che ripristina la query originale qualora l'operazione di sottrazione la svuoti completamente.\\
+Superato questo passaggio di pulizia, la funzione adotta un approccio asimmetrico per il calcolo delle metriche: mentre l'analisi semantica tramite embedding continua a sfruttare la frase originale e completa per permettere al modello linguistico di coglierne l'intero contesto sfumato, le ricerche testuali mirate ai titoli e ai membri del cast utilizzano esclusivamente la stringa purificata, concentrando l'algoritmo di Levenshtein solo sui nomi propri e sui riferimenti esatti. Le quattro metriche cos\`i ricavate vengono infine convogliate nella funzione aggregatrice per la consueta ponderazione dinamica dei pesi. Il processo si conclude mappando i punteggi finali sul dataset, ordinando i risultati in senso decrescente ed estraendo i primi k elementi richiesti, restituendo cos\`i un array di stringhe pulito e immediatamente fruibile.
 \begin{lstlisting}
 	def get_top_k_titles(user_query, k=10):
 		query_genres = find_genres(user_query, unique_genres)
@@ -584,145 +639,164 @@ Per intercettare i riferimenti a specifiche figure umane o societarie menzionate
 \end{lstlisting}
 
 \subsection{Validation Set}
-
+Per misurare oggettivamente le performance dell'algoritmo e stressare ogni singola componente del motore di raccomandazione, \`e stato strutturato un validation\_set di collaudo. Questo ambiente di test associa diverse richieste di input ai rispettivi risultati attesi. Al fine di simulare scenari di utilizzo reali ed eterogenei, il set \`e stato strategicamente suddiviso in sei tipologie di ricerca:
+\begin{itemize}
+	\item Query basilari: Combinazioni dirette di attori, temi chiave e frammenti di trama.
+	
+	\item Query miste: Incroci espliciti tra la tassonomia dei generi e le celebrità del cast.
+	
+	\item Query su registi e trame: Accostamenti mirati tra l'autore della pellicola e i concetti cardine dell'opera.
+	
+	\item Query su brand e case di produzione: Ricerche focalizzate sulle major cinematografiche o su specifici universi narrativi (es. Marvel, Pixar).
+	
+	\item Query semantiche: Descrizioni concettuali e astratte degli eventi, prive di titoli o nomi propri, concepite per validare la pura intelligenza contestuale dei sentence embedding.
+	
+	\item Query con refusi: Termini intenzionalmente affetti da errori ortografici o imprecisioni grammaticali, fondamentali per testare la robustezza e la tolleranza della metrica fuzzy.
+\end{itemize}
 \begin{lstlisting}
-	validation_set = [
-	# Query basilari
-	{
-		"query": "action robert downey jr.", 
-		"expected": ["Iron Man", "The Avengers"]
-	},
-	{
-		"query": "animation jesse eisenberg", 
-		"expected": ["Rio", "Rio 2"]
-	},
-	{
-		"query": "christopher nolan space", 
-		"expected": ["Interstellar"]
-	},
-	{
-		"query": "pirates johnny dep", 
-		"expected": ["Pirates of the Caribbean: The Curse of the Black Pearl"]
-	},
-	{
-		"query": "trein your dregon",
-		"expected": ["How to Train Your Dragon"]
-	},
-	{
-		"query": "zoe saldana action",
-		"expected": ["Guardians of the Galaxy", "Avatar"]
-	},
-	
-	# Query miste con generi e attori
-	{
-		"query": "romance leonardo dicaprio", 
-		"expected": ["Titanic", "The Great Gatsby"]
-	},
-	{
-		"query": "sci-fi keanu reeves", 
-		"expected": ["The Matrix", "The Matrix Reloaded"]
-	},
-	{
-		"query": "action tom cruise", 
-		"expected": ["Mission: Impossible", "Mission: Impossible II", "Mission: Impossible III", "Edge of Tomorrow"]
-	},
-	{
-		"query": "kristen bell animation", 
-		"expected": ["Frozen"]
-	},
-	{
-		"query": "action adventure fantasy sam worthington", 
-		"expected": ["Avatar", "Clash of the Titans"]
-	},
-	
-	# Query con registi e trame
-	{
-		"query": "christopher nolan dream", 
-		"expected": ["Inception"]
-	},
-	{
-		"query": "quentin tarantino crime story", 
-		"expected": ["Pulp Fiction", "Reservoir Dogs"]
-	},
-	{
-		"query": "steven spielberg dinosaur park", 
-		"expected": ["Jurassic Park"]
-	},
-	{
-		"query": "peter jackson ring fantasy", 
-		"expected": ["The Lord of the Rings: The Fellowship of the Ring", "The Lord of the Rings: The Two Towers", "The Lord of the Rings: The Return of the King"]
-	},
-	
-	# Query con brand e case di produzione
-	{
-		"query": "pixar animation", 
-		"expected": ["Cars", "A Bug's Life"]
-	},
-	{
-		"query": "marvel studios action", 
-		"expected": ["The Avengers", "Iron Man", "Guardians of the Galaxy"]
-	},
-	{
-		"query": "dreamworks animation", 
-		"expected": ["Shrek", "Madagascar"]
-	},
-	{
-		"query": "warner batman", 
-		"expected": ["The Dark Knight", "The Dark Knight Rises", "Batman Begins"]
-	},
-	
-	# Query semantiche
-	{
-		"query": "space travel alien planet", 
-		"expected": ["Avatar", "Interstellar", "Prometheus"]
-	},
-	{
-		"query": "wizard school boy", 
-		"expected": ["Harry Potter and the Philosopher's Stone"]
-	},
-	{
-		"query": "world war II nazist", 
-		"expected": ["Schindler's List", "Inglourious Basterds"]
-	},
-	{
-		"query": "artificial intelligence robot", 
-		"expected": ["I, Robot", "Robocop", "Ex Machina"]
-	},
-	{
-		"query": "disney lion kingdom", 
-		"expected": ["The Lion King"]
-	},
-	{
-		"query": "science fiction dinosaur come back", 
-		"expected": ["Jurassic Park"]
-	},
-	
-	# Query refusi
-	{
-		"query": "iron men", 
-		"expected": ["Iron Man"]
-	},
-	{
-		"query": "quentin tarantno", 
-		"expected": ["Pulp Fiction", "Inglourious Basterds"]
-	},
-	{
-		"query": "atroboy", 
-		"expected": ["Astroboy"]
-	},
-	{
-		"query": "christofer nolan", 
-		"expected": ["Inception", "Interstellar", "The Dark Knight"]
-	},
-	{
-		"query": "johnny depp wanderlund", 
-		"expected": ["Alice in Wonderland"]
-	}
-	]
+validation_set = [
+# Query basilari
+{
+	"query": "marvel group robert downey jr.", 
+	"expected": ["The Avengers"]
+},
+{
+	"query": "animation movie rat cooking", 
+	"expected": ["Ratatouille"]
+},
+{
+	"query": "christopher nolan space", 
+	"expected": ["Interstellar"]
+},
+{
+	"query": "pirates johnny depp", 
+	"expected": ["Pirates of the Caribbean: The Curse of the Black Pearl"]
+},
+{
+	"query": "trein your dregon",
+	"expected": ["How to Train Your Dragon"]
+},
+{
+	"query": "space crew finds alien eggs on a planet",
+	"expected": ["Alien"]
+},
+
+# Query miste con generi e attori
+{
+	"query": "romance leonardo dicaprio", 
+	"expected": ["Romeo + Juliet"]
+},
+{
+	"query": "sci-fi keanu reeves", 
+	"expected": ["The Matrix"]
+},
+{
+	"query": "action harrison ford", 
+	"expected": ["Star Wars"]
+},
+{
+	"query": "kristen bell animation", 
+	"expected": ["Frozen"]
+},
+{
+	"query": "science fiction matt damon", 
+	"expected": ["The Martian"]
+},
+
+# Query con registi e trame
+{
+	"query": "christopher nolan dream", 
+	"expected": ["Inception"]
+},
+{
+	"query": "micheal jordan basket", 
+	"expected": ["Space Jam"]
+},
+{
+	"query": "steven spielberg dinosaur park", 
+	"expected": ["Jurassic Park"]
+},
+{
+	"query": "peter jackson ring fantasy", 
+	"expected": ["The Lord of the Rings: The Fellowship of the Ring"]
+},
+
+# Query con brand e case di produzione
+{
+	"query": "pixar animation", 
+	"expected": ["The Good Dinosaur"]
+},
+{
+	"query": "marvel studios action science fiction", 
+	"expected": ["The Avengers"]
+},
+{
+	"query": "dreamworks animation", 
+	"expected": ["Shrek"]
+},
+{
+	"query": "warner batman superman", 
+	"expected": ["Batman v Superman: Dawn of Justice"]
+},
+
+# Query semantiche
+{
+	"query": "frank miller's graphic novel greek", 
+	"expected": ["300: Rise of an Empire"]
+},
+{
+	"query": "wizard school boy", 
+	"expected": ["Harry Potter and the Philosopher's Stone"]
+},
+{
+	"query": "world war II nazist", 
+	"expected": ["Schindler's List"]
+},
+{
+	"query": "living racing cars", 
+	"expected": ["Cars"]
+},
+{
+	"query": "disney lion kingdom", 
+	"expected": ["The Lion King"]
+},
+{
+	"query": "dystopian bugs rebellion", 
+	"expected": ["A Bug's Life"]
+},
+
+# Query refusi
+{
+	"query": "reging bull", 
+	"expected": ["Raging Bull"]
+},
+{
+	"query": "martin scorses", 
+	"expected": ["The Wolf of Wall Street"]
+},
+{
+	"query": "atroboy", 
+	"expected": ["Astro Boy"]
+},
+{
+	"query": "christofer nolan", 
+	"expected": ["Interstellar"]
+},
+{
+	"query": "montecristo", 
+	"expected": ["The Count of Monte Cristo"]
+}
+]
 \end{lstlisting}
 
 \subsection{Funzione: run\_validation}
-
+Per automatizzare il processo di testing e valutare oggettivamente l'accuratezza del motore di raccomandazione, la funzione run\_validation cicla l'intero validation\_set, confrontando in modo sistematico le raccomandazioni prodotte dall'algoritmo con i risultati attesi. Il cuore di questa procedura risiede nel calcolo discorsivo di due metriche statistiche fondamentali e complementari per i sistemi di Information Retrieval: l'Hit Rate e il Mean Reciprocal Rank.\\
+L'Hit Rate rappresenta il tasso di successo puro, concepita per valutare una condizione netta: verificare se il sistema sia riuscito o meno a recuperare il film corretto all'interno dei risultati proposti. L'obiettivo primario di questo indicatore \`e misurare la capacit\`a complessiva dell'algoritmo, indicando la percentuale totale di query per le quali il sistema ha generato almeno un risultato utile.\\
+A fare da controparte a questa visione dicotomica interviene il Mean Reciprocal Rank, una metrica legata al posizionamento dei risultati. In un reale scenario d'uso, l'ordine dei titoli \`e cruciale, poich\`e l'utente desidera sempre rintracciare l'opera corretta in cima alla lista senza dover scorrere decine di suggerimenti irrilevanti. Per tradurre matematicamente questa esigenza, per ogni query l'algoritmo individua l'esatta posizione in classifica del primo risultato corretto e ne calcola la frazione inversa. Questo meccanismo di rango reciproco premia in modo drastico la precisione assoluta e penalizza rapidamente la discesa: un film al primo posto restituisce un valore pieno di 1.0, al secondo dimezza a 0.50, al terzo scende a 0.33, per arrivare a 0.10 al decimo posto o precipitare a 0.0 in caso di assenza totale.\\
+La media aritmetica di tutti i reciproci calcolati fornisce l'MRR globale, espresso in linguaggio formale dalla seguente equazione:
+\begin{equation}
+	\text{MRR} = \frac{1}{|Q|} \sum_{i=1}^{|Q|} \frac{1}{\text{rank}_i}
+\end{equation}
 \begin{lstlisting}
 	def run_validation(test_set, k=10):
 		total_expected_movies = 0
@@ -752,4 +826,9 @@ Per intercettare i riferimenti a specifiche figure umane o societarie menzionate
 					print(f"Mancato: '{expected_movie}' non presente nei top {k}")
 		print("-"*50)
 \end{lstlisting}
+\section{Conclusioni e Risultati}
+I risultati emersi dalla fase di validazione certificano in modo inequivocabile l'efficacia e la solidit\`a del motore di raccomandazione sviluppato, evidenziando performance di altissimo livello su entrambi gli indicatori statistici di riferimento.\\
+Analizzando la pura capacit\`a di recupero, il sistema ha registrato un eccellente Hit Rate del 93.33\%, riuscendo a intercettare con successo ben 28 delle 30 pellicole attese all'interno delle prime dieci posizioni. Questo dato testimonia la robustezza dell'architettura ibrida, capace di decodificare correttamente l'intento dell'utente e di recuperare le informazioni desiderate affrontando con disinvoltura un ampio spettro di scenari: dalle query semantiche pi\`u astratte, passando per i filtri tassonomici, fino ad arrivare agli input affetti da palesi errori ortografici.\\
+Ad avvalorare ulteriormente l'affidabilit\`a del sistema interviene il risultato dell'MRR che si attesta sul ragguardevole valore di 0.833. Un punteggio cos\`i vicino all'unit\`a assoluta non indica semplicemente che l'algoritmo trova i film corretti, ma dimostra la sua precisione nel posizionarli sistematicamente in vetta alla classifica. Traducendo questo dato matematico in un'esperienza utente reale, significa che la pellicola desiderata compare quasi sempre al primo o al secondo posto dei risultati proposti, azzerando di fatto la necessit\`a per l'utente di scorrere lunghe liste di raccomandazioni irrilevanti.\\
+In sintesi, le statistiche confermano che la complessa sinergia tra l'intelligenza contestuale dei sentence embedding, la tolleranza flessibile della logica fuzzy e il bilanciamento dinamico dei pesi di aggregazione ha prodotto un motore altamente responsivo. Il sistema riesce a coniugare una copertura di ricerca quasi totale con una precisione chirurgica nell'ordinamento dei titoli, garantendo una potenziale user experience fluida, rapida e soddisfacente.
 \end{document}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.12.10)  16 JUN 2026 00:37
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.12.10)  17 JUN 2026 17:33
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1013,31 +1013,31 @@ File: lstlang1.sty 2024/09/23 1.10c listings language file
 
 Writing index file Documentazione.idx
 LaTeX Font Info:    Trying to load font information for OT1+ptm on input line 7
-3.
+4.
 (C:\Users\branc\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ot1ptm.fd
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
 (Documentazione.aux)
 \openout1 = `Documentazione.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 73.
-LaTeX Font Info:    ... okay on input line 73.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 73.
-LaTeX Font Info:    ... okay on input line 73.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 73.
-LaTeX Font Info:    ... okay on input line 73.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 73.
-LaTeX Font Info:    ... okay on input line 73.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 73.
-LaTeX Font Info:    ... okay on input line 73.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 73.
-LaTeX Font Info:    ... okay on input line 73.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 73.
-LaTeX Font Info:    ... okay on input line 73.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 73.
-LaTeX Font Info:    ... okay on input line 73.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 73.
-LaTeX Font Info:    ... okay on input line 73.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 74.
+LaTeX Font Info:    ... okay on input line 74.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 74.
+LaTeX Font Info:    ... okay on input line 74.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 74.
+LaTeX Font Info:    ... okay on input line 74.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 74.
+LaTeX Font Info:    ... okay on input line 74.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 74.
+LaTeX Font Info:    ... okay on input line 74.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 74.
+LaTeX Font Info:    ... okay on input line 74.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 74.
+LaTeX Font Info:    ... okay on input line 74.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 74.
+LaTeX Font Info:    ... okay on input line 74.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 74.
+LaTeX Font Info:    ... okay on input line 74.
 \c@lstlisting=\count363
 
 (C:\Users\branc\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mk
@@ -1065,8 +1065,8 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 fg
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 ))
-LaTeX Info: Redefining \it@ocap on input line 73.
-LaTeX Info: Redefining \it@ccap on input line 73.
+LaTeX Info: Redefining \it@ocap on input line 74.
+LaTeX Info: Redefining \it@ccap on input line 74.
 
 
 File italian.ldf warning: 
@@ -1074,13 +1074,13 @@ italian.ldf    With OT1 encoding guillemets are poorly faked
 italian.ldf    Use T1 encoding
 italian.ldf    or specify a font with command \CaporaliFrom
 italian.ldf    See the documentation concerning the babel-italian typesetting
-italian.ldf    on input line 73.
+italian.ldf    on input line 74.
 
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: float package is loaded.
 Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
-Package hyperref Info: Link coloring OFF on input line 73.
+Package hyperref Info: Link coloring OFF on input line 74.
 (Documentazione.out) (Documentazione.out)
 \@outlinefile=\write5
 \openout5 = `Documentazione.out'.
@@ -1122,15 +1122,15 @@ Package hyperref Info: Link coloring OFF on input line 73.
 
 
 
-<immagini/logodisamis.jpg, id=110, 999.735pt x 475.7775pt>
+<immagini/logodisamis.jpg, id=122, 999.735pt x 475.7775pt>
 File: immagini/logodisamis.jpg Graphic file (type jpg)
 <use immagini/logodisamis.jpg>
-Package pdftex.def Info: immagini/logodisamis.jpg  used on input line 104.
+Package pdftex.def Info: immagini/logodisamis.jpg  used on input line 105.
 (pdftex.def)             Requested size: 128.0374pt x 60.93124pt.
-<immagini/logounisa.png, id=111, 351.3125pt x 351.3125pt>
+<immagini/logounisa.png, id=123, 351.3125pt x 351.3125pt>
 File: immagini/logounisa.png Graphic file (type png)
 <use immagini/logounisa.png>
-Package pdftex.def Info: immagini/logounisa.png  used on input line 104.
+Package pdftex.def Info: immagini/logounisa.png  used on input line 105.
 (pdftex.def)             Requested size: 85.35826pt x 85.35667pt.
 
 Package fancyhdr Warning: \headheight is too small (60.0pt): 
@@ -1185,22 +1185,16 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.109 	\newpage
+l.110 	\newpage
                 [1]
 LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 1
-13.
+14.
 
 (C:\Users\branc\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 )
 Missing character: There is no Ã in font ptmr7t!
 Missing character: There is no ¹ in font ptmr7t!
-Missing character: There is no Ã in font ptmr7t!
-Missing character: There is no ² in font ptmr7t!
-Missing character: There is no Ã in font ptmr7t!
-Missing character: There is no ¹ in font ptmr7t!
-Missing character: There is no Ã in font ptmr7t!
-Missing character: There is no   in font ptmr7t!
 Missing character: There is no Ã in font ptmr7t!
 Missing character: There is no   in font ptmr7t!
 
@@ -1220,96 +1214,80 @@ Missing character: There is no   in font ptmr7t!
 
 
 [4]
-<immagini/describe.png, id=165, 664.73344pt x 234.1247pt>
+<immagini/describe.png, id=180, 664.73344pt x 234.1247pt>
 File: immagini/describe.png Graphic file (type png)
 <use immagini/describe.png>
-Package pdftex.def Info: immagini/describe.png  used on input line 202.
+Package pdftex.def Info: immagini/describe.png  used on input line 203.
 (pdftex.def)             Requested size: 384.1096pt x 135.2887pt.
-<immagini/null.png, id=166, 276.28218pt x 432.86719pt>
+<immagini/null.png, id=181, 276.28218pt x 432.86719pt>
 File: immagini/null.png Graphic file (type png)
 <use immagini/null.png>
-Package pdftex.def Info: immagini/null.png  used on input line 228.
+Package pdftex.def Info: immagini/null.png  used on input line 229.
 (pdftex.def)             Requested size: 128.0387pt x 200.60083pt.
-<immagini/nullgraph.png, id=167, 919.18407pt x 442.65375pt>
+<immagini/nullgraph.png, id=182, 919.18407pt x 442.65375pt>
 File: immagini/nullgraph.png Graphic file (type png)
 <use immagini/nullgraph.png>
-Package pdftex.def Info: immagini/nullgraph.png  used on input line 232.
+Package pdftex.def Info: immagini/nullgraph.png  used on input line 233.
 (pdftex.def)             Requested size: 384.1096pt x 184.9812pt.
 
 
 [5 <./immagini/describe.png>]
 
 [6 <./immagini/null.png> <./immagini/nullgraph.png>]
-Missing character: There is no Ã in font ptmr7t!
-Missing character: There is no   in font ptmr7t!
-
 
 [7]
-<immagini/histogram.png, id=242, 1117.17375pt x 740.7675pt>
+<immagini/histogram.png, id=257, 1117.17375pt x 740.7675pt>
 File: immagini/histogram.png Graphic file (type png)
 <use immagini/histogram.png>
-Package pdftex.def Info: immagini/histogram.png  used on input line 285.
+Package pdftex.def Info: immagini/histogram.png  used on input line 286.
 (pdftex.def)             Requested size: 426.79135pt x 282.98659pt.
-
-Missing character: There is no Ã in font ptmr7t!
-Missing character: There is no   in font ptmr7t!
-<immagini/boxplot.png, id=243, 993.7125pt x 691.83469pt>
+<immagini/boxplot.png, id=258, 993.7125pt x 691.83469pt>
 File: immagini/boxplot.png Graphic file (type png)
 <use immagini/boxplot.png>
-Package pdftex.def Info: immagini/boxplot.png  used on input line 290.
+Package pdftex.def Info: immagini/boxplot.png  used on input line 291.
 (pdftex.def)             Requested size: 384.1096pt x 267.4181pt.
 
 
 [8 <./immagini/histogram.png>]
 Missing character: There is no Ã in font ptmr7t!
 Missing character: There is no   in font ptmr7t!
-<immagini/uscite.png, id=250, 649.67719pt x 357.58594pt>
+<immagini/uscite.png, id=265, 649.67719pt x 357.58594pt>
 File: immagini/uscite.png Graphic file (type png)
 <use immagini/uscite.png>
-Package pdftex.def Info: immagini/uscite.png  used on input line 295.
+Package pdftex.def Info: immagini/uscite.png  used on input line 296.
 (pdftex.def)             Requested size: 341.43437pt x 187.93184pt.
 
 
 [9 <./immagini/boxplot.png>]
-<immagini/top10.png, id=257, 1117.17375pt x 439.6425pt>
+<immagini/top10.png, id=272, 1117.17375pt x 439.6425pt>
 File: immagini/top10.png Graphic file (type png)
 <use immagini/top10.png>
-Package pdftex.def Info: immagini/top10.png  used on input line 301.
+Package pdftex.def Info: immagini/top10.png  used on input line 302.
 (pdftex.def)             Requested size: 426.79135pt x 167.95139pt.
 
 
 [10 <./immagini/uscite.png> <./immagini/top10.png>]
 Missing character: There is no Ã in font ptmr7t!
-Missing character: There is no ¹ in font ptmr7t!
-Missing character: There is no Ã in font ptmr7t!
 Missing character: There is no ¨ in font ptmr7t!
-Missing character: There is no Ã in font ptmr7t!
-Missing character: There is no ¹ in font ptmr7t!
-<immagini/roimed.png, id=273, 1117.17375pt x 439.6425pt>
+<immagini/roimed.png, id=288, 1117.17375pt x 439.6425pt>
 File: immagini/roimed.png Graphic file (type png)
 <use immagini/roimed.png>
-Package pdftex.def Info: immagini/roimed.png  used on input line 320.
+Package pdftex.def Info: immagini/roimed.png  used on input line 321.
 (pdftex.def)             Requested size: 426.79135pt x 167.95139pt.
 Missing character: There is no Ã in font ptmr7t!
-Missing character: There is no ¹ in font ptmr7t!
-Missing character: There is no Ã in font ptmr7t!
 Missing character: There is no   in font ptmr7t!
-<immagini/topincassi.png, id=274, 931.22906pt x 506.6428pt>
+<immagini/topincassi.png, id=289, 931.22906pt x 506.6428pt>
 File: immagini/topincassi.png Graphic file (type png)
 <use immagini/topincassi.png>
-Package pdftex.def Info: immagini/topincassi.png  used on input line 325.
+Package pdftex.def Info: immagini/topincassi.png  used on input line 326.
 (pdftex.def)             Requested size: 426.79135pt x 232.20041pt.
 
 
 [11 <./immagini/roimed.png>]
-Missing character: There is no Ã in font ptmr7t!
-Missing character: There is no   in font ptmr7t!
-Missing character: There is no Ã in font ptmr7t!
-Missing character: There is no ¹ in font ptmr7t!
-<immagini/corr.png, id=287, 1191.7022pt x 439.6425pt>
+<immagini/corr.png, id=302, 1191.7022pt x 439.6425pt>
 File: immagini/corr.png Graphic file (type png)
 <use immagini/corr.png>
-Package pdftex.def Info: immagini/corr.png  used on input line 333.
+Package pdftex.def Info: immagini/corr.png  used on input line 334.
 (pdftex.def)             Requested size: 426.79135pt x 157.45274pt.
 
 
@@ -1318,118 +1296,100 @@ Missing character: There is no Ã in font ptmr7t!
 Missing character: There is no   in font ptmr7t!
 Missing character: There is no Ã in font ptmr7t!
 Missing character: There is no   in font ptmr7t!
-<immagini/corr2.png, id=295, 880.79062pt x 416.30531pt>
+<immagini/corr2.png, id=310, 880.79062pt x 416.30531pt>
 File: immagini/corr2.png Graphic file (type png)
 <use immagini/corr2.png>
-Package pdftex.def Info: immagini/corr2.png  used on input line 342.
+Package pdftex.def Info: immagini/corr2.png  used on input line 343.
 (pdftex.def)             Requested size: 426.79135pt x 201.72362pt.
 
 
 [13 <./immagini/corr.png>]
-Missing character: There is no â in font ptmr7t!
-Missing character: There is no € in font ptmr7t!
-Missing character: There is no ” in font ptmr7t!
-Missing character: There is no Ã in font ptmr7t!
-Missing character: There is no   in font ptmr7t!
-<immagini/cloud.png, id=302, 889.82437pt x 487.06969pt>
+<immagini/cloud.png, id=317, 889.82437pt x 487.06969pt>
 File: immagini/cloud.png Graphic file (type png)
 <use immagini/cloud.png>
-Package pdftex.def Info: immagini/cloud.png  used on input line 350.
+Package pdftex.def Info: immagini/cloud.png  used on input line 351.
 (pdftex.def)             Requested size: 341.43437pt x 186.8944pt.
 
 
 [14 <./immagini/corr2.png>]
 Missing character: There is no Ã in font ptmr7t!
-Missing character: There is no ¨ in font ptmr7t!
-Missing character: There is no Ã in font ptmr7t!
-Missing character: There is no   in font ptmr7t!
-Missing character: There is no Ã in font ptmr7t!
 Missing character: There is no   in font ptmr7t!
 
 
 [15 <./immagini/cloud.png>]
-Missing character: There is no Ã in font ptmr7t!
-Missing character: There is no ¨ in font ptmr7t!
-Missing character: There is no Ã in font ptmr7t!
-Missing character: There is no   in font ptmr7t!
-Missing character: There is no Ã in font ptmr7t!
-Missing character: There is no   in font ptmr7t!
-
 
 [16]
-Missing character: There is no Ã in font ptmr7t!
-Missing character: There is no   in font ptmr7t!
-Missing character: There is no Ã in font ptmr7t!
-Missing character: There is no   in font ptmr7t!
-
 
 [17]
-Missing character: There is no Ã in font ptmr7t!
-Missing character: There is no ¬ in font ptmr7t!
-Missing character: There is no Ã in font ptmr7t!
-Missing character: There is no ¨ in font ptmr7t!
-
 
 [18]
-Missing character: There is no Ã in font ptmr7t!
-Missing character: There is no   in font ptmr7t!
 
-Overfull \hbox (7.6931pt too wide) in paragraph at lines 469--470
+[19]
+Overfull \hbox (7.6931pt too wide) in paragraph at lines 478--479
 \OT1/ptm/m/n/10 Per in-te-gra-re la ri-cer-ca di-ret-ta dei ti-to-li al-l'in-te
 r-no del-la lo-gi-ca di rac-co-man-da-zio-ne, la fun-zio-ne calc[]title[]score
  []
 
 
 
-[19]
-Missing character: There is no Ã in font ptmr7t!
-Missing character: There is no ¹ in font ptmr7t!
-
-
 [20]
-Missing character: There is no Ã in font cmtt8!
-Missing character: There is no ¨ in font cmtt8!
+Missing character: There is no Ã in font ptmr7t!
+Missing character: There is no ¬ in font ptmr7t!
 
 
 [21]
-<immagini/search.png, id=486, 1008.01593pt x 252.945pt>
+
+[22]
+<immagini/search.png, id=532, 1008.01593pt x 252.945pt>
 File: immagini/search.png Graphic file (type png)
 <use immagini/search.png>
-Package pdftex.def Info: immagini/search.png  used on input line 560.
+Package pdftex.def Info: immagini/search.png  used on input line 611.
 (pdftex.def)             Requested size: 426.79135pt x 107.09686pt.
 
 
-[22 <./immagini/search.png>]
-
 [23]
 
-[24]
+[24 <./immagini/search.png>]
+Missing character: There is no Ã in font ptmr7t!
+Missing character: There is no   in font ptmr7t!
 
-[25] (Documentazione.aux)
+
+[25]
+
+[26]
+
+[27]
+
+[28]
+
+[29] (Documentazione.aux)
  ***********
 LaTeX2e <2024-11-01>
 L3 programming layer <2024-11-02>
  ***********
 Package rerunfilecheck Info: File `Documentazione.out' has not changed.
-(rerunfilecheck)             Checksum: CA34EDBAB8E8908BF5D22D459E8EC763;4579.
+(rerunfilecheck)             Checksum: 577C85EF9E7CBF4B125E111E3476AA77;5068.
  ) 
 Here is how much of TeX's memory you used:
- 29841 strings out of 473682
- 571069 string characters out of 5719215
- 1271428 words of memory out of 5000000
- 51969 multiletter control sequences out of 15000+600000
- 588798 words of font info for 88 fonts, out of 8000000 for 9000
+ 29930 strings out of 473682
+ 572201 string characters out of 5719215
+ 1288430 words of memory out of 5000000
+ 51993 multiletter control sequences out of 15000+600000
+ 595224 words of font info for 103 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 116i,15n,121p,1609b,2008s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 116i,15n,121p,1611b,2010s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/branc/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
-cmtt10.pfb><C:/Users/branc/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
-fonts/cm/cmtt8.pfb><C:/Users/branc/AppData/Local/Programs/MiKTeX/fonts/type1/ur
-w/times/utmb8a.pfb><C:/Users/branc/AppData/Local/Programs/MiKTeX/fonts/type1/ur
-w/times/utmr8a.pfb><C:/Users/branc/AppData/Local/Programs/MiKTeX/fonts/type1/ur
-w/times/utmri8a.pfb>
-Output written on Documentazione.pdf (26 pages, 1440953 bytes).
+cmr10.pfb><C:/Users/branc/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsf
+onts/cm/cmsy10.pfb><C:/Users/branc/AppData/Local/Programs/MiKTeX/fonts/type1/pu
+blic/amsfonts/cm/cmtt10.pfb><C:/Users/branc/AppData/Local/Programs/MiKTeX/fonts
+/type1/public/amsfonts/cm/cmtt8.pfb><C:/Users/branc/AppData/Local/Programs/MiKT
+eX/fonts/type1/urw/symbol/usyr.pfb><C:/Users/branc/AppData/Local/Programs/MiKTe
+X/fonts/type1/urw/times/utmb8a.pfb><C:/Users/branc/AppData/Local/Programs/MiKTe
+X/fonts/type1/urw/times/utmr8a.pfb><C:/Users/branc/AppData/Local/Programs/MiKTe
+X/fonts/type1/urw/times/utmri8a.pfb>
+Output written on Documentazione.pdf (30 pages, 1486771 bytes).
 PDF statistics:
- 814 PDF objects out of 1000 (max. 8388607)
- 467 named destinations out of 1000 (max. 500000)
- 296 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 916 PDF objects out of 1000 (max. 8388607)
+ 519 named destinations out of 1000 (max. 500000)
+ 320 words of extra memory for PDF output out of 10000 (max. 10000000)
 
